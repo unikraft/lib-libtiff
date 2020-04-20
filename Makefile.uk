@@ -1,0 +1,143 @@
+#  SPDX-License-Identifier: BSD-3-Clause
+#
+#  tiff Makefile.uk
+#
+#  Authors: Esteban Martinez <esteban.martinez@csuc.cat>
+#
+#  Copyright (c) 2019, Consorci de Serveis Universitaris de Catalunya (CSUC). All rights reserved.
+#
+#  Redistribution and use in source and binary forms, with or without
+#  modification, are permitted provided that the following conditions
+#  are met:
+#
+#  1. Redistributions of source code must retain the above copyright
+#     notice, this list of conditions and the following disclaimer.
+#  2. Redistributions in binary form must reproduce the above copyright
+#     notice, this list of conditions and the following disclaimer in the
+#     documentation and/or other materials provided with the distribution.
+#  3. Neither the name of the copyright holder nor the names of its
+#     contributors may be used to endorse or promote products derived from
+#     this software without specific prior written permission.
+#
+#  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+#  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+#  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+#  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+#  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+#  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+#  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+#  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+#  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+#  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+#  POSSIBILITY OF SUCH DAMAGE.
+#
+#  THIS HEADER MAY NOT BE EXTRACTED OR MODIFIED IN ANY WAY.
+#
+
+################################################################################
+# Library registration
+################################################################################
+$(eval $(call addlib_s,libtiff,$(CONFIG_LIBTIFF)))
+
+################################################################################
+# Original sources
+################################################################################
+LIBTIFF_VERSION=4.0.10
+LIBTIFF_URL=https://raw.githubusercontent.com/python-pillow/pillow-depends/master/tiff-$(LIBTIFF_VERSION).tar.gz
+LIBTIFF_PATCHDIR=$(LIBTIFF_BASE)/patches
+LIBTIFF_SUBDIR=tiff-$(LIBTIFF_VERSION)
+$(eval $(call fetch,libtiff,$(LIBTIFF_URL)))
+$(eval $(call patch,libtiff,$(LIBTIFF_PATCHDIR),$(LIBTIFF_SUBDIR)))
+
+################################################################################
+# Helpers
+################################################################################
+LIBTIFF_EXTRACTED = $(LIBTIFF_ORIGIN)/$(LIBTIFF_SUBDIR)
+
+################################################################################
+# Library includes
+################################################################################
+LIBTIFF_COMMON_INCLUDES-y      += -I$(LIBTIFF_EXTRACTED)/
+LIBTIFF_COMMON_INCLUDES-y      += -I$(LIBTIFF_EXTRACTED)/libtiff
+
+CINCLUDES-$(CONFIG_LIBTIFF)    += $(LIBTIFF_COMMON_INCLUDES-y)
+
+LIBTIFF_CINCLUDES   += -I$(LIBTIFF_EXTRACTED)
+
+################################################################################
+# Global flags
+################################################################################
+# Suppressed flags
+LIBTIFF_SUPPRESS_FLAGS += -Wno-unused-parameter \
+	-Wno-unused-variable -Wno-unused-value -Wno-unused-function \
+	-Wno-missing-field-initializers -Wno-implicit-fallthrough \
+	-Wno-misleading-indentation -Wno-stringop-truncation \
+	-Wno-strict-aliasing
+LIBTIFF_CFLAGS-y   += $(LIBLCMS_SUPPRESS_FLAGS) \
+	-Wno-pointer-to-int-cast -Wno-int-to-pointer-cast \
+	-Wno-misleading-indentation -Wno-stringop-truncation \
+	-Wno-strict-aliasing
+
+LIBTIFF_DEFINES    += -DHAVE_CONFIG_H
+LIBTIFF_CFLAGS-y   += $(LIBTIFF_DEFINES)
+
+################################################################################
+# TIFF src
+################################################################################
+LIBTIFF_SRCS-y += $(LIBTIFF_EXTRACTED)/port/dummy.c
+LIBTIFF_SRCS-y += $(LIBTIFF_EXTRACTED)/libtiff/tif_aux.c
+LIBTIFF_SRCS-y += $(LIBTIFF_EXTRACTED)/libtiff/tif_close.c
+LIBTIFF_SRCS-y += $(LIBTIFF_EXTRACTED)/libtiff/tif_codec.c
+LIBTIFF_SRCS-y += $(LIBTIFF_EXTRACTED)/libtiff/tif_color.c
+LIBTIFF_SRCS-y += $(LIBTIFF_EXTRACTED)/libtiff/tif_compress.c
+LIBTIFF_SRCS-y += $(LIBTIFF_EXTRACTED)/libtiff/tif_dir.c
+LIBTIFF_SRCS-y += $(LIBTIFF_EXTRACTED)/libtiff/tif_dirinfo.c
+LIBTIFF_SRCS-y += $(LIBTIFF_EXTRACTED)/libtiff/tif_dirread.c
+LIBTIFF_SRCS-y += $(LIBTIFF_EXTRACTED)/libtiff/tif_dirwrite.c
+LIBTIFF_SRCS-y += $(LIBTIFF_EXTRACTED)/libtiff/tif_dumpmode.c
+LIBTIFF_SRCS-y += $(LIBTIFF_EXTRACTED)/libtiff/tif_error.c
+LIBTIFF_SRCS-y += $(LIBTIFF_EXTRACTED)/libtiff/tif_extension.c
+LIBTIFF_SRCS-y += $(LIBTIFF_EXTRACTED)/libtiff/tif_fax3.c
+LIBTIFF_SRCS-y += $(LIBTIFF_EXTRACTED)/libtiff/tif_fax3sm.c
+LIBTIFF_SRCS-y += $(LIBTIFF_EXTRACTED)/libtiff/tif_flush.c
+LIBTIFF_SRCS-y += $(LIBTIFF_EXTRACTED)/libtiff/tif_getimage.c
+LIBTIFF_SRCS-y += $(LIBTIFF_EXTRACTED)/libtiff/tif_jbig.c
+LIBTIFF_SRCS-y += $(LIBTIFF_EXTRACTED)/libtiff/tif_jpeg.c
+LIBTIFF_SRCS-y += $(LIBTIFF_EXTRACTED)/libtiff/tif_jpeg_12.c
+LIBTIFF_SRCS-y += $(LIBTIFF_EXTRACTED)/libtiff/tif_luv.c
+LIBTIFF_SRCS-y += $(LIBTIFF_EXTRACTED)/libtiff/tif_lzma.c
+LIBTIFF_SRCS-y += $(LIBTIFF_EXTRACTED)/libtiff/tif_lzw.c
+LIBTIFF_SRCS-y += $(LIBTIFF_EXTRACTED)/libtiff/tif_next.c
+LIBTIFF_SRCS-y += $(LIBTIFF_EXTRACTED)/libtiff/tif_ojpeg.c
+LIBTIFF_SRCS-y += $(LIBTIFF_EXTRACTED)/libtiff/tif_open.c
+LIBTIFF_SRCS-y += $(LIBTIFF_EXTRACTED)/libtiff/tif_packbits.c
+LIBTIFF_SRCS-y += $(LIBTIFF_EXTRACTED)/libtiff/tif_pixarlog.c
+LIBTIFF_SRCS-y += $(LIBTIFF_EXTRACTED)/libtiff/tif_predict.c
+LIBTIFF_SRCS-y += $(LIBTIFF_EXTRACTED)/libtiff/tif_print.c
+LIBTIFF_SRCS-y += $(LIBTIFF_EXTRACTED)/libtiff/tif_read.c
+LIBTIFF_SRCS-y += $(LIBTIFF_EXTRACTED)/libtiff/tif_strip.c
+LIBTIFF_SRCS-y += $(LIBTIFF_EXTRACTED)/libtiff/tif_swab.c
+LIBTIFF_SRCS-y += $(LIBTIFF_EXTRACTED)/libtiff/tif_thunder.c
+LIBTIFF_SRCS-y += $(LIBTIFF_EXTRACTED)/libtiff/tif_tile.c
+LIBTIFF_SRCS-y += $(LIBTIFF_EXTRACTED)/libtiff/tif_version.c
+LIBTIFF_SRCS-y += $(LIBTIFF_EXTRACTED)/libtiff/tif_warning.c
+LIBTIFF_SRCS-y += $(LIBTIFF_EXTRACTED)/libtiff/tif_write.c
+LIBTIFF_SRCS-y += $(LIBTIFF_EXTRACTED)/libtiff/tif_zip.c
+LIBTIFF_SRCS-y += $(LIBTIFF_EXTRACTED)/libtiff/tif_unix.c
+LIBTIFF_SRCS-y += $(LIBTIFF_EXTRACTED)/contrib/addtiffo/tif_overview.c
+LIBTIFF_SRCS-y += $(LIBTIFF_EXTRACTED)/contrib/addtiffo/tif_ovrcache.c
+
+################################################################################
+# TIFF prepare
+################################################################################
+# Run ./configure
+$(LIBTIFF_EXTRACTED)/config.status: $(LIBTIFF_BUILD)/.origin
+	$(call verbose_cmd,CONFIG,libtiff: $(notdir $@), \
+		cd $(LIBTIFF_EXTRACTED) && ./configure)
+
+LIBTIFF_PREPARED_DEPS = \
+	$(LIBTIFF_EXTRACTED)/config.status \
+
+$(LIBTIFF_BUILD)/.prepared: $(LIBTIFF_PREPARED_DEPS)
+
+UK_PREPARE += $(LIBTIFF_BUILD)/.prepared
