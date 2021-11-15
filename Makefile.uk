@@ -42,7 +42,7 @@ $(eval $(call addlib_s,libtiff,$(CONFIG_LIBTIFF)))
 ################################################################################
 # Original sources
 ################################################################################
-LIBTIFF_VERSION=4.0.10
+LIBTIFF_VERSION=4.3.0
 LIBTIFF_URL=https://raw.githubusercontent.com/python-pillow/pillow-depends/master/tiff-$(LIBTIFF_VERSION).tar.gz
 LIBTIFF_PATCHDIR=$(LIBTIFF_BASE)/patches
 LIBTIFF_SUBDIR=tiff-$(LIBTIFF_VERSION)
