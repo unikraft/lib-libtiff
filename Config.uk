@@ -1,0 +1,12 @@
+menuconfig LIBTIFF
+    bool "libtiff - Tagged Image File Format "
+    default n
+    select LIBNOLIBC if !HAVE_LIBC
+    select LIBUKDEBUG
+    select LIBUKALLOC
+    select LIBNEWLIBC
+    select LIBZLIB
+    select LIBUKMMAP
+
+if LIBTIFF
+endif
