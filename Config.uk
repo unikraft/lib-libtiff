@@ -1,0 +1,13 @@
+menuconfig LIBTIFF
+    bool "libtiff - TIFF image format library"
+    depends on LIBNEWLIBC || LIBMUSL_MATH
+    select LIBPOSIX_MMAP
+    default n
+
+if LIBTIFF
+    config LIBTIFF_CXX
+    bool "Provide C++ stream API"
+    select LIBCXX
+    default n
+
+endif
