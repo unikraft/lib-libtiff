@@ -1,0 +1,118 @@
+#  libtiff Makefile.uk
+#
+#  Authors: Andrei Tatar <andrei@unikraft.io>
+#
+#  Copyright (c) 2023, Unikraft GmbH and The Unikraft Authors.
+#
+#  Redistribution and use in source and binary forms, with or without
+#  modification, are permitted provided that the following conditions
+#  are met:
+#
+#  1. Redistributions of source code must retain the above copyright
+#     notice, this list of conditions and the following disclaimer.
+#  2. Redistributions in binary form must reproduce the above copyright
+#     notice, this list of conditions and the following disclaimer in the
+#     documentation and/or other materials provided with the distribution.
+#  3. Neither the name of the copyright holder nor the names of its
+#     contributors may be used to endorse or promote products derived from
+#     this software without specific prior written permission.
+#
+#  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+#  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+#  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+#  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+#  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+#  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+#  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+#  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+#  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+#  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+#  POSSIBILITY OF SUCH DAMAGE.
+#
+
+################################################################################
+# Library registration
+################################################################################
+$(eval $(call addlib_s,libtiff,$(CONFIG_LIBTIFF)))
+
+################################################################################
+# Sources
+################################################################################
+LIBTIFF_VERSION=4.5.1
+LIBTIFF_URL=https://download.osgeo.org/libtiff/tiff-$(LIBTIFF_VERSION).tar.xz
+LIBTIFF_DIRNAME=tiff-$(LIBTIFF_VERSION)
+#LIBTIFF_PATCHDIR=$(LIBTIFF_BASE)/patches
+$(eval $(call fetch,libtiff,$(LIBTIFF_URL)))
+#$(eval $(call patch,libtiff,$(LIBTIFF_PATCHDIR),$(LIBTIFF_DIRNAME)))
+
+################################################################################
+# Helpers
+################################################################################
+LIBTIFF_SRC = $(LIBTIFF_ORIGIN)/$(LIBTIFF_DIRNAME)
+
+################################################################################
+# Library includes
+################################################################################
+# API
+LIBTIFF__API += -I$(LIBTIFF_SRC)/libtiff
+LIBTIFF__API += -iquote$(LIBTIFF_BASE)/include
+
+CINCLUDES-$(CONFIG_LIBTIFF) += $(LIBTIFF__API)
+CXXINCLUDES-$(CONFIG_LIBTIFF) += $(LIBTIFF__API)
+
+################################################################################
+# Global flags
+################################################################################
+LIBTIFF_CFLAGS += -DHAVE_CONFIG_H
+LIBTIFF_CFLAGS += -DLERC_STATIC
+
+################################################################################
+# Library sources
+################################################################################
+# These are taken from the upstream build in the order that make builds them.
+# Please take care to maintain the order when updating.
+################################################################################
+LIBTIFF_SRCS-y += $(LIBTIFF_SRC)/libtiff/tif_aux.c
+LIBTIFF_SRCS-y += $(LIBTIFF_SRC)/libtiff/tif_close.c
+LIBTIFF_SRCS-y += $(LIBTIFF_SRC)/libtiff/tif_codec.c
+LIBTIFF_SRCS-y += $(LIBTIFF_SRC)/libtiff/tif_color.c
+LIBTIFF_SRCS-y += $(LIBTIFF_SRC)/libtiff/tif_compress.c
+LIBTIFF_SRCS-y += $(LIBTIFF_SRC)/libtiff/tif_dir.c
+LIBTIFF_SRCS-y += $(LIBTIFF_SRC)/libtiff/tif_dirinfo.c
+LIBTIFF_SRCS-y += $(LIBTIFF_SRC)/libtiff/tif_dirread.c
+LIBTIFF_SRCS-y += $(LIBTIFF_SRC)/libtiff/tif_dirwrite.c
+LIBTIFF_SRCS-y += $(LIBTIFF_SRC)/libtiff/tif_dumpmode.c
+LIBTIFF_SRCS-y += $(LIBTIFF_SRC)/libtiff/tif_error.c
+LIBTIFF_SRCS-y += $(LIBTIFF_SRC)/libtiff/tif_extension.c
+LIBTIFF_SRCS-y += $(LIBTIFF_SRC)/libtiff/tif_fax3.c
+LIBTIFF_SRCS-y += $(LIBTIFF_SRC)/libtiff/tif_fax3sm.c
+LIBTIFF_SRCS-y += $(LIBTIFF_SRC)/libtiff/tif_flush.c
+LIBTIFF_SRCS-y += $(LIBTIFF_SRC)/libtiff/tif_getimage.c
+LIBTIFF_SRCS-y += $(LIBTIFF_SRC)/libtiff/tif_hash_set.c
+LIBTIFF_SRCS-y += $(LIBTIFF_SRC)/libtiff/tif_jbig.c
+LIBTIFF_SRCS-y += $(LIBTIFF_SRC)/libtiff/tif_jpeg.c
+LIBTIFF_SRCS-y += $(LIBTIFF_SRC)/libtiff/tif_jpeg_12.c
+LIBTIFF_SRCS-y += $(LIBTIFF_SRC)/libtiff/tif_lerc.c
+LIBTIFF_SRCS-y += $(LIBTIFF_SRC)/libtiff/tif_luv.c
+LIBTIFF_SRCS-y += $(LIBTIFF_SRC)/libtiff/tif_lzma.c
+LIBTIFF_SRCS-y += $(LIBTIFF_SRC)/libtiff/tif_lzw.c
+LIBTIFF_SRCS-y += $(LIBTIFF_SRC)/libtiff/tif_next.c
+LIBTIFF_SRCS-y += $(LIBTIFF_SRC)/libtiff/tif_ojpeg.c
+LIBTIFF_SRCS-y += $(LIBTIFF_SRC)/libtiff/tif_open.c
+LIBTIFF_SRCS-y += $(LIBTIFF_SRC)/libtiff/tif_packbits.c
+LIBTIFF_SRCS-y += $(LIBTIFF_SRC)/libtiff/tif_pixarlog.c
+LIBTIFF_SRCS-y += $(LIBTIFF_SRC)/libtiff/tif_predict.c
+LIBTIFF_SRCS-y += $(LIBTIFF_SRC)/libtiff/tif_print.c
+LIBTIFF_SRCS-y += $(LIBTIFF_SRC)/libtiff/tif_read.c
+LIBTIFF_SRCS-y += $(LIBTIFF_SRC)/libtiff/tif_strip.c
+LIBTIFF_SRCS-y += $(LIBTIFF_SRC)/libtiff/tif_swab.c
+LIBTIFF_SRCS-y += $(LIBTIFF_SRC)/libtiff/tif_thunder.c
+LIBTIFF_SRCS-y += $(LIBTIFF_SRC)/libtiff/tif_tile.c
+LIBTIFF_SRCS-y += $(LIBTIFF_SRC)/libtiff/tif_version.c
+LIBTIFF_SRCS-y += $(LIBTIFF_SRC)/libtiff/tif_warning.c
+LIBTIFF_SRCS-y += $(LIBTIFF_SRC)/libtiff/tif_webp.c
+LIBTIFF_SRCS-y += $(LIBTIFF_SRC)/libtiff/tif_write.c
+LIBTIFF_SRCS-y += $(LIBTIFF_SRC)/libtiff/tif_zip.c
+LIBTIFF_SRCS-y += $(LIBTIFF_SRC)/libtiff/tif_zstd.c
+LIBTIFF_SRCS-y += $(LIBTIFF_SRC)/libtiff/tif_unix.c
+LIBTIFF_SRCS-$(CONFIG_LIBTIFF_CXX) += $(LIBTIFF_SRC)/libtiff/tif_stream.cxx
